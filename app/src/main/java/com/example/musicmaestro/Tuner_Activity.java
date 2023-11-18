@@ -64,6 +64,7 @@ public class Tuner_Activity extends AppCompatActivity {
                 AudioFormat.ENCODING_PCM_16BIT);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO},AUDIO_PERMISSION_REQUEST_CODE);
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -71,6 +72,7 @@ public class Tuner_Activity extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
