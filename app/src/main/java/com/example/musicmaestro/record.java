@@ -4,34 +4,83 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
 import android.Manifest;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class record extends AppCompatActivity {
 
     private static int MIC_CODE=200;
     MediaRecorder mediaRecorder;
+
     MediaPlayer mediaPlayer;
+
+    ListView recordingListView;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record2);
+        setContentView(R.layout.activity_record);
+
+        Button home_Button=findViewById(R.id.record_home);
+        recordingListView =findViewById(R.id.recordingListView);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,getRecordingList());
+        recordingListView.setAdapter(adapter);
+
+        recordingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedRecording = (String) parent.getItemAtPosition(position);
+            }
+        });
+
+        recordingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedRecording = (String) parent.getItemAtPosition(position);
+                // Implement delete logic using selectedRecording path
+                // e.g., deleteRecording(selectedRecording);
+                return true;
+            }
+        });
+        home_Button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(record.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         if(isMicPresent()){
             getMicPermissions();
         }
+    }
+
+    private List<String> getRecordingList() {
+        List<String> recordingList = new ArrayList<>();
+
+        return recordingList;
     }
 
     public void Record(View v){
@@ -74,6 +123,12 @@ public class record extends AppCompatActivity {
         }
     }
 
+    public void Home(View v)
+    {
+        Intent intent = new Intent(record.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     private boolean isMicPresent(){
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE)){
             return true;
@@ -94,4 +149,31 @@ public class record extends AppCompatActivity {
         File file = new File(directory,"testRecording"+".mp3");
         return file.getPath();
     }
+
+    private void startMediaPlayer(String filePath) {
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(filePath);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteRecording(String filePath) {
+        File fileToDelete = new File(filePath);
+        if (fileToDelete.exists()) {
+            if (fileToDelete.delete()) {
+                Toast.makeText(this, "Recording deleted", Toast.LENGTH_SHORT).show();
+                // Update the ListView
+                adapter.clear();
+                adapter.addAll(getRecordingList());
+                adapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(this, "Failed to delete recording", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }
