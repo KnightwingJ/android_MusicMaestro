@@ -34,10 +34,14 @@ public class record extends AppCompatActivity {
     ListView recordingListView;
     ArrayAdapter<String> adapter;
 
+    File recordingDirectory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        recordingDirectory = getRecordingDirectory();
 
         Button home_Button=findViewById(R.id.record_home);
         recordingListView =findViewById(R.id.recordingListView);
@@ -49,6 +53,7 @@ public class record extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRecording = (String) parent.getItemAtPosition(position);
+                startMediaPlayer(selectedRecording);
             }
         });
 
@@ -83,6 +88,11 @@ public class record extends AppCompatActivity {
         return recordingList;
     }
 
+    private File getRecordingDirectory(){
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        return contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+    }
+
     public void Record(View v){
         try {
             mediaRecorder = new MediaRecorder();
@@ -92,6 +102,10 @@ public class record extends AppCompatActivity {
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.prepare();
             mediaRecorder.start();
+
+            adapter.clear();
+            adapter.addAll(getRecordingList());
+            adapter.notifyDataSetChanged();
 
             Toast.makeText(this, "Recording has begun", Toast.LENGTH_LONG).show();
         }
@@ -104,6 +118,10 @@ public class record extends AppCompatActivity {
         mediaRecorder.stop();
         mediaRecorder.release();
         mediaRecorder=null;
+
+        adapter.clear();
+        adapter.addAll(getRecordingList());
+        adapter.notifyDataSetChanged();
 
         Toast.makeText(this, "Recording has finished", Toast.LENGTH_LONG).show();
     }
