@@ -54,6 +54,7 @@ public class record extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRecording = (String) parent.getItemAtPosition(position);
                 startMediaPlayer(selectedRecording);
+                //Toast.makeText(this, "Audio is now playing", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -62,7 +63,7 @@ public class record extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRecording = (String) parent.getItemAtPosition(position);
                 // Implement delete logic using selectedRecording path
-                // e.g., deleteRecording(selectedRecording);
+                deleteRecording(selectedRecording);
                 return true;
             }
         });
@@ -84,7 +85,13 @@ public class record extends AppCompatActivity {
 
     private List<String> getRecordingList() {
         List<String> recordingList = new ArrayList<>();
+        File[] recordingFiles = recordingDirectory.listFiles();
 
+        if(recordingFiles!=null){
+            for(File file: recordingFiles){
+                recordingList.add(file.getName());
+            }
+        }
         return recordingList;
     }
 
@@ -164,7 +171,8 @@ public class record extends AppCompatActivity {
     private String getRecordingFilePath(){
         ContextWrapper contextWrapper=new ContextWrapper(getApplicationContext());
         File directory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File file = new File(directory,"testRecording"+".mp3");
+        String fileName = "Recording_" + System.currentTimeMillis()+".mp3";
+        File file = new File(directory,fileName);
         return file.getPath();
     }
 

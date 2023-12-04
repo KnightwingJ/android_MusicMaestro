@@ -40,8 +40,8 @@
         android:id="@+id/chord"
         android:layout_width="170dp"
         android:layout_height="176dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="348dp"
+        android:layout_marginEnd="104dp"
+        android:layout_marginBottom="344dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="?attr/listChoiceBackgroundIndicator" />
@@ -72,7 +72,9 @@
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="508dp"
+        android:layout_marginEnd="16dp"
         android:text="D"
+        app:layout_constraintEnd_toStartOf="@+id/gButton"
         app:layout_constraintStart_toEndOf="@+id/aButton"
         app:layout_constraintTop_toTopOf="parent" />
 

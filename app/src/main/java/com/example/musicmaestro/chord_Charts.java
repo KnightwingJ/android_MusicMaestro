@@ -67,6 +67,14 @@ public class chord_Charts extends AppCompatActivity {
             }
         });
 
+        cButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chord.setImageResource(chordArray[3]);
+
+            }
+        });
+
 
         Button home_button=findViewById(R.id.home_chord);
 
