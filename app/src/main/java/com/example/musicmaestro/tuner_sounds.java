@@ -38,9 +38,7 @@ public class tuner_sounds extends AppCompatActivity {
         stringList.add("G");
         stringList.add("B");
         stringList.add("High E");
-        /*for (int i = 0; i < stringArray.length; i++) {
-            stringList.add("String " + (i + 1)); // You can customize the string names as needed
-        }*/
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, stringList);
