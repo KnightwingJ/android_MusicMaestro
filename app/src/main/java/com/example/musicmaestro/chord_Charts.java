@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 public class chord_Charts extends AppCompatActivity {
-
+    private boolean maj_min;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +22,14 @@ public class chord_Charts extends AppCompatActivity {
         Button cButton=findViewById(R.id.cButton);
         Button gButton=findViewById(R.id.gButton);
         Button fButton=findViewById(R.id.fButton);
+        Switch major_minor=(Switch)findViewById(R.id.major_minor);
+
+        maj_min = major_minor.isChecked();
 
         ImageView chord=findViewById(R.id.chord);
+
+        major_minor.setTextOn("Minor");
+        major_minor.setTextOff("Major");
 
         int[] chordArray={R.drawable.echord,
                 R.drawable.achord,
@@ -31,38 +38,78 @@ public class chord_Charts extends AppCompatActivity {
                 R.drawable.gchord,
                 R.drawable.fchord};
 
+        int[] minorArray={R.drawable.eminor,
+                R.drawable.aminor,
+                R.drawable.dminor,
+                R.drawable.cminor,
+                R.drawable.gminorpng,
+                R.drawable.fminor};
+
+        major_minor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                maj_min =!maj_min;
+                major_minor.setTextOn("Minor");
+            }
+        });
+
         eButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[0]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[0]);
+                }
+                else{
+                    chord.setImageResource(minorArray[0]);
+                }
 
             }
         });
         aButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[1]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[1]);
+                }
+                else{
+                    chord.setImageResource(minorArray[1]);
+                }
 
             }
         });
         dButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[2]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[2]);
+                }
+                else{
+                    chord.setImageResource(minorArray[2]);
+                }
 
             }
         });
         gButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[4]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[4]);
+                }
+                else{
+                    chord.setImageResource(minorArray[4]);
+                }
 
             }
         });
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[5]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[5]);
+                }
+                else{
+                    chord.setImageResource(minorArray[5]);
+                }
 
             }
         });
@@ -70,7 +117,12 @@ public class chord_Charts extends AppCompatActivity {
         cButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chord.setImageResource(chordArray[3]);
+                if (!maj_min){
+                    chord.setImageResource(chordArray[3]);
+                }
+                else{
+                    chord.setImageResource(minorArray[3]);
+                }
 
             }
         });

@@ -133,21 +133,6 @@ public class record extends AppCompatActivity {
         Toast.makeText(this, "Recording has finished", Toast.LENGTH_LONG).show();
     }
 
-    public void Play(View v){
-
-        try {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(getRecordingFilePath());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-
-            Toast.makeText(this, "Recording is being played", Toast.LENGTH_LONG).show();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
     public void Home(View v)
     {
         Intent intent = new Intent(record.this, MainActivity.class);

@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MusicMaestro"
         tools:targetApi="31">
         <activity
+            android:name=".tuner_sounds"
+            android:exported="false" />
+        <activity
             android:name=".record"
             android:exported="false" />
         <activity

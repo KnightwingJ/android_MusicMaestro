@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, Tuner_Activity.class);
+                Intent intent = new Intent(MainActivity.this, tuner_sounds.class);
                 startActivity(intent);
             }
         });
