@@ -1,5 +1,6 @@
 package com.example.musicmaestro;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,8 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class record extends AppCompatActivity {
 
@@ -41,6 +45,9 @@ public class record extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+
+
+
         recordingDirectory = getRecordingDirectory();
 
         Button home_Button=findViewById(R.id.record_home);
@@ -48,25 +55,17 @@ public class record extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,getRecordingList());
         recordingListView.setAdapter(adapter);
+        registerForContextMenu(recordingListView);
+
 
         recordingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRecording = (String) parent.getItemAtPosition(position);
                 startMediaPlayer(selectedRecording);
-                //Toast.makeText(this, "Audio is now playing", Toast.LENGTH_LONG).show();
             }
         });
 
-        recordingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedRecording = (String) parent.getItemAtPosition(position);
-                // Implement delete logic using selectedRecording path
-                deleteRecording(selectedRecording);
-                return true;
-            }
-        });
         home_Button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v)
@@ -82,6 +81,45 @@ public class record extends AppCompatActivity {
             getMicPermissions();
         }
     }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    // Add this method to your activity
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        String selectedRecording = (String) recordingListView.getItemAtPosition(position);
+
+        if (item.getItemId()==R.id.menu_delete){
+            deleteRecording(selectedRecording);
+            return true;
+        }
+        else{
+            return super.onContextItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MIC_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, start recording
+            } else {
+                Toast.makeText(this, "Permission denied. Recording cannot proceed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
     private List<String> getRecordingList() {
         List<String> recordingList = new ArrayList<>();
@@ -101,36 +139,43 @@ public class record extends AppCompatActivity {
     }
 
     public void Record(View v){
-        try {
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setOutputFile(getRecordingFilePath());
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mediaRecorder.prepare();
-            mediaRecorder.start();
+        this.mediaRecorder = new MediaRecorder();
+        this.mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        this.mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        this.mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        MediaRecorder.getAudioSourceMax();
+        this.mediaRecorder.setOutputFile(getRecordingFilePath());
 
-            adapter.clear();
-            adapter.addAll(getRecordingList());
-            adapter.notifyDataSetChanged();
-
-            Toast.makeText(this, "Recording has begun", Toast.LENGTH_LONG).show();
-        }
-        catch(Exception e){
+        try
+        {
+            this.mediaRecorder.prepare();
+            this.mediaRecorder.start();
+        } catch (final IllegalStateException e)
+        {
+            e.printStackTrace();
+        } catch (final IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     public void Stop(View v){
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder=null;
+        if(mediaRecorder!=null){
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder=null;
 
-        adapter.clear();
-        adapter.addAll(getRecordingList());
-        adapter.notifyDataSetChanged();
+            adapter.clear();
+            adapter.addAll(getRecordingList());
+            adapter.notifyDataSetChanged();
 
-        Toast.makeText(this, "Recording has finished", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Recording has finished", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this, "No recording to stop", Toast.LENGTH_LONG).show();
+
+        }
+
     }
 
     public void Home(View v)
@@ -153,6 +198,14 @@ public class record extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(mediaPlayer !=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
+        }
+    }
     private String getRecordingFilePath(){
         ContextWrapper contextWrapper=new ContextWrapper(getApplicationContext());
         File directory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
@@ -161,19 +214,20 @@ public class record extends AppCompatActivity {
         return file.getPath();
     }
 
-    private void startMediaPlayer(String filePath) {
+    private void startMediaPlayer(String fileName) {
         try {
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(filePath);
+            mediaPlayer.setDataSource(new File(recordingDirectory,fileName).getPath());
             mediaPlayer.prepare();
             mediaPlayer.start();
+            Toast.makeText(this,"Recording being played",Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void deleteRecording(String filePath) {
-        File fileToDelete = new File(filePath);
+    private void deleteRecording(String fileName) {
+        File fileToDelete = new File(recordingDirectory,fileName);
         if (fileToDelete.exists()) {
             if (fileToDelete.delete()) {
                 Toast.makeText(this, "Recording deleted", Toast.LENGTH_SHORT).show();
@@ -184,6 +238,9 @@ public class record extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Failed to delete recording", Toast.LENGTH_SHORT).show();
             }
+        }
+        else{
+            Toast.makeText(this,"File not found",Toast.LENGTH_SHORT).show();
         }
     }
 
