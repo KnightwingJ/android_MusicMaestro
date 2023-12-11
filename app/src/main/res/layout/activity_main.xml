@@ -4,51 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/chord_button"
-        android:layout_width="408dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="10dp"
-        android:text="Chord Charts"
+        android:layout_width="182dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="115dp"
         android:onClick="openChords"
-        app:layout_constraintBottom_toTopOf="@+id/record_button"
+        android:text="Chord Charts"
+        app:icon="@drawable/note"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tuner_button" />
 
     <Button
         android:id="@+id/tuner_button"
-        android:layout_width="408dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="10dp"
-        android:text="Tuner"
+        android:layout_width="181dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="115dp"
+        android:background="@null"
         android:onClick="openTuner"
-        app:layout_constraintBottom_toTopOf="@+id/chord_button"
+        android:text="Tuner"
+        android:textAlignment="center"
+        app:icon="@drawable/tuner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
-        android:layout_width="251dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="100dp"
+        android:id="@+id/textView6"
+        android:layout_width="349dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="36dp"
         android:text="Welcome to the Music Maestro"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/record_button"
-        android:layout_width="408dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="10dp"
-        android:text="Record"
+        android:layout_width="184dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="115dp"
         android:onClick="openRecord"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Record"
+        app:icon="@android:drawable/ic_btn_speak_now"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chord_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

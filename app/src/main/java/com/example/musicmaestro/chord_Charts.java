@@ -45,14 +45,15 @@ public class chord_Charts extends AppCompatActivity {
                 R.drawable.gminorpng,
                 R.drawable.fminor};
 
+        //Switch to change from Major chords to Minor Chords
         major_minor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 maj_min =!maj_min;
-                major_minor.setTextOn("Minor");
+                major_minor.setText("Minor");
             }
         });
-
+        //Multiple buttons for each chord
         eButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

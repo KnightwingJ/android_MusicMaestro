@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".record">
 
     <Button
         android:id="@+id/record_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginBottom="64dp"
-        android:text="Home"
+        android:layout_width="129dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="676dp"
         android:onClick="Home"
+        android:text="Home"
+        app:icon="@drawable/home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -21,9 +23,11 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="131dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="76dp"
         android:text="Record Your Own Music"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,39 +35,42 @@
         android:id="@+id/record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="21dp"
-        android:text="Record"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="132dp"
         android:onClick="Record"
+        android:text="Record"
+        app:icon="@android:drawable/presence_online"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/recordingListView" />
 
     <Button
         android:id="@+id/stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="21dp"
-        android:text="Stop"
+        android:layout_marginTop="132dp"
+        android:layout_marginEnd="40dp"
         android:onClick="Stop"
+        android:text="Stop"
+        app:icon="@android:drawable/screen_background_light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/recordingListView" />
 
     <ListView
         android:id="@+id/recordingListView"
         android:layout_width="409dp"
         android:layout_height="260dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="1dp"
         android:choiceMode="singleChoice"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
         android:listSelector="@android:color/darker_gray"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/record" />
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/record_home" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
